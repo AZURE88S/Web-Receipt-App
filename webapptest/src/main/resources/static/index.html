@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Receipt Extractor</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #loading {
+            display: none;
+            color: blue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Scan Your Reciept</h2>
+
+    <div class="form-group">
+        <input type="file" id="receiptFile" accept="image/*">
+        <button onclick="uploadAndExtract()">Extract Data</button>
+    </div>
+
+    <p id="loading">Processing with AI... please wait.</p>
+
+    <hr>
+
+    <h3>Auto-filled Form</h3>
+
+    <div class="form-group">
+        <label>Merchant Name</label>
+        <input type="text" id="merchantField" placeholder="Waiting for scan...">
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        <input type="text" id="dateField" placeholder="Waiting for scan...">
+    </div>
+
+    <div class="form-group">
+        <label>Total Amount</label>
+        <input type="text" id="totalField" placeholder="0.00">
+    </div>
+
+    <div class="form-group">
+        <label>Currency</label>
+        <input type="text" id="currencyField" placeholder="Waiting for scan...">
+    </div>
+
+    <button onclick="saveData()"
+        style="background-color: green; color: white; padding: 10px; width: 100%; border: none; border-radius: 4px; cursor: pointer;">
+        Save Data
+    </button>
+
+    <script>
+        async function uploadAndExtract() {
+            const fileInput = document.getElementById('receiptFile');
+            const loading = document.getElementById('loading');
+
+            if (fileInput.files.length === 0) {
+                alert("Please select an image file first!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            loading.style.display = "block";
+
+            try {
+                const response = await fetch('/api/receipt/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                document.getElementById('merchantField').value = data.merchant;
+                document.getElementById('dateField').value = data.date;
+                document.getElementById('totalField').value = data.total;
+                document.getElementById('currencyField').value = data.currency;
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to process receipt.");
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+
+        async function saveData() {
+            const payload = {
+                merchant: document.getElementById('merchantField').value,
+                date: document.getElementById('dateField').value,
+                total: document.getElementById('totalField').value,
+                currency: document.getElementById('currencyField').value
+            };
+
+            const response = await fetch('/api/receipt/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) alert("Data saved successfully!");
+        }
+    </script>
+</body>
+
+</html>
