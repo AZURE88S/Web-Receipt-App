@@ -7,6 +7,8 @@
 3. Click on *WebapptestApplication.java* and click the "Run Java" button within your IDE. Wait for the terminal console to show that the Spring Boot server has started sucessfully.
 4. Open the Google Chrome browser and go to this link:
    http://localhost:8080/index.html
+   
+*Note : Physical Receipt Screenshots must be refined into a CamScanner first to be properly extracted.*
 
 ## Models used for this application ##
 - Tesseract OCR (via Tess4J), responsible for reading image files and extracting them into text.
