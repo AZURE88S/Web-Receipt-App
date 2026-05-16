@@ -13,3 +13,4 @@
 ## Models used for this application ##
 - Tesseract OCR (via Tess4J), responsible for reading image files and extracting them into text.
 - LLM DeepSeek-r1:1.5b, responsible for sorting the extracted file into their respective fields.
+- Ollama, responsible for hosting and running the LLM model in the code.
