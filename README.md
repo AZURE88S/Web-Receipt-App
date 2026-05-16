@@ -8,7 +8,7 @@
 4. Open the Google Chrome browser and go to this link:
    http://localhost:8080/index.html
    
-*Note : Physical Receipt Screenshots must be refined using a CamScanner first to be properly extracted.*
+*Note : Physical Receipt Screenshots must be refined using a CamScanner first in order to be properly extracted.*
 
 ## Models used for this application ##
 - Tesseract OCR (via Tess4J), responsible for reading image files and extracting them into text.
